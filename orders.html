@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cek Pesanan - MamaGaming</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+      <!-- Brand (Left) -->
+      <a class="navbar-brand fw-bold text-white" href="index.html">
+        <i class="fa-solid fa-gamepad me-2 fa-xl text-warning"></i>MAMAGAMING
+      </a>
+
+      <!-- Toggler Mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav Menu (Center) & Search/Auth (Right) -->
+      <div class="collapse navbar-collapse" id="nav">
+        <!-- Center Menu -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="orders.html"><i class="fa-solid fa-receipt"></i> Cek Pesanan</a>
+          </li>
+        </ul>
+
+        <!-- Right Menu (Search & Auth) -->
+        <div class="d-flex align-items-center gap-2 ms-lg-3">
+           <div id="auth-buttons" class="d-flex gap-2">
+            <a href="login.html" class="btn btn-auth"><i class="fa-solid fa-right-to-bracket me-2"></i>Masuk</a>
+            <a href="register.html" class="btn btn-primary px-4 rounded-pill">Daftar</a>
+          </div>
+
+          <div id="user-menu-container" class="d-none dropdown">
+            <button class="btn btn-dark dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+              <i class="fa-solid fa-user-circle fa-lg"></i> <span id="user-email-display" class="d-none d-md-inline small">User</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
+              <li><a class="dropdown-item" href="orders.html"><i class="fa-solid fa-receipt me-2"></i> Riwayat Transaksi</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+    <!-- Search Section (Hero Style) -->
+    <div class="hero-banner mb-5 text-center text-lg-start">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="hero-title mb-3">Lacak <span class="text-highlight">Pesananmu</span></h1>
+          <p class="hero-desc mb-4">Pantau status transaksi top up game kamu secara realtime. Cukup masukkan nomor invoice.</p>
+          
+          <form id="search-order-form" class="hero-search w-100" style="max-width: 600px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="invoice-input" placeholder="Masukkan Nomor Invoice (ORD-XXX atau ID Dokumen)">
+            <button type="submit" class="btn btn-primary rounded-pill px-4 ms-2 fw-bold">Cari</button>
+          </form>
+        </div>
+        <div class="col-lg-4 d-none d-lg-block text-center">
+            <i class="fa-solid fa-receipt fa-10x text-white opacity-25 animate-float-slow" style="transform: rotate(15deg);"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions Section -->
+    <div class="mt-5">
+      <div class="section-header">
+        <i class="fa-solid fa-clock-rotate-left fa-lg text-highlight"></i>
+        <h4 class="section-title">10 Transaksi Terakhir</h4>
+      </div>
+      
+      <div id="orders-status" class="alert d-none" role="alert"></div>
+
+      <div class="section-card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-dark-custom table-hover mb-0 align-middle">
+              <thead>
+                <tr>
+                  <th class="ps-4">Tanggal</th>
+                  <th>Invoice</th>
+                  <th>No. HP</th>
+                  <th>Item</th>
+                  <th>Harga</th>
+                  <th class="pe-4">Status</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table" class="small" style="font-size: 0.9rem;"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Search Result Modal -->
+  <div class="modal fade" id="searchResultModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content section-card text-white">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h5 class="modal-title"><i class="fa-solid fa-receipt me-2"></i> Detail Pesanan</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="search-result-content">
+          <div class="text-center text-muted py-4">
+            Memuat data...
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-white pt-5 pb-3 mt-5" style="background-color: var(--bg-card); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">MAMAGAMING</h5>
+          <p class="small text-white-50">Platform top up game terpercaya di Indonesia. Kami menyediakan layanan top up untuk berbagai game populer dengan harga termurah.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Metode Pembayaran</h5>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-light text-dark">QRIS</span>
+            <span class="badge bg-light text-dark">DANA</span>
+            <span class="badge bg-light text-dark">OVO</span>
+            <span class="badge bg-light text-dark">GoPay</span>
+            <span class="badge bg-light text-dark">ShopeePay</span>
+            <span class="badge bg-light text-dark">LinkAja</span>
+            <span class="badge bg-light text-dark">Mobile Banking</span>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Hubungi Kami</h5>
+          <ul class="list-unstyled small text-white-50">
+            <li class="mb-2"><i class="fab fa-whatsapp me-2"></i> 0812-3456-7890</li>
+            <li class="mb-2"><i class="far fa-envelope me-2"></i> support@mamagaming.com</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-secondary">
+      <div class="text-center small text-white-50">
+        &copy; 2026 MamaGaming. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/firebase.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/orders.js"></script>
+</body>
+</html>

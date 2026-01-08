@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MamaGaming Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body style="padding-top: 80px;">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-admin fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <span class="text-highlight">Mama</span>Gaming <span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">ADMIN</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html"><i class="fa-solid fa-list me-1"></i> Pesanan</a>
+                    </li>
+                    <!-- Future: Products Menu -->
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-muted me-3 small" id="admin-email">Loading...</span>
+                    <button id="logout-btn" class="btn btn-outline-danger btn-sm">
+                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        
+        <!-- Stats Row -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="stats-card d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fa-solid fa-cart-shopping text-primary fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Total Pesanan</h6>
+                        <h3 class="fw-bold mb-0" id="total-orders">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fa-solid fa-check text-success fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Sukses</h6>
+                        <h3 class="fw-bold mb-0" id="success-orders">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fa-solid fa-clock text-warning fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Pending</h6>
+                        <h3 class="fw-bold mb-0" id="pending-orders">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fa-solid fa-money-bill text-info fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Pendapatan</h6>
+                        <h3 class="fw-bold mb-0" id="total-revenue">-</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="section-card">
+            <div class="card-header d-flex justify-content-between align-items-center py-3 px-4" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-table-list me-2"></i> Daftar Pesanan Terbaru</h5>
+                <button class="btn btn-sm btn-outline-light" onclick="loadOrders()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-dark-custom table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Invoice / Tanggal</th>
+                            <th>Item</th>
+                            <th>Data Akun</th>
+                            <th>Harga</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <div class="spinner-border text-primary mb-2" role="status"></div>
+                                <p class="mb-0">Memuat data pesanan...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-muted small px-4" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                Menampilkan 20 pesanan terakhir.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content section-card text-white">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <h5 class="modal-title">Edit Pesanan</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-form">
+                        <input type="hidden" id="edit-id">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select text-white" id="edit-status">
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="success">Success</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Catatan (Opsional)</label>
+                            <textarea class="form-control text-white" id="edit-note" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveOrder()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/firebase.js"></script>
+
+    <script>
+        // Check Auth
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else if (user.email !== 'admin@mamagaming.com') {
+                alert('Akses ditolak: Anda bukan admin!');
+                firebase.auth().signOut().then(() => window.location.href = '../index.html');
+            } else {
+                document.getElementById('admin-email').innerText = user.email;
+                loadOrders();
+                loadStats();
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            firebase.auth().signOut().then(() => window.location.href = 'login.html');
+        });
+
+        const db = firebase.firestore();
+        let orders = [];
+
+        async function loadStats() {
+            try {
+                // Simple stats based on recent orders (for demo, real app needs aggregation query)
+                const snapshot = await db.collection('orders').get();
+                const total = snapshot.size;
+                let success = 0;
+                let pending = 0;
+                let revenue = 0;
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.status === 'success') {
+                        success++;
+                        revenue += (data.finalPrice ?? data.price ?? data.totalPrice ?? 0);
+                    } else if(data.status === 'pending') {
+                        pending++;
+                    }
+                });
+
+                document.getElementById('total-orders').innerText = total;
+                document.getElementById('success-orders').innerText = success;
+                document.getElementById('pending-orders').innerText = pending;
+                document.getElementById('total-revenue').innerText = 'Rp ' + revenue.toLocaleString('id-ID');
+
+            } catch (error) {
+                console.error("Error loading stats:", error);
+            }
+        }
+
+        async function loadOrders() {
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <div class="spinner-border text-primary mb-2" role="status"></div>
+                        <p class="mb-0">Memuat data pesanan...</p>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const snapshot = await db.collection('orders')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-box-open fa-2x mb-3"></i>
+                                <p>Belum ada pesanan.</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                orders = []; // Reset local cache
+
+                snapshot.forEach(doc => {
+                    const order = { id: doc.id, ...doc.data() };
+                    orders.push(order);
+                    
+                    const toDate = (ts) => ts?.toDate ? ts.toDate() : (ts?.seconds ? new Date(ts.seconds * 1000) : (ts ? new Date(ts) : null));
+                    const dateObj = toDate(order.createdAt);
+                    const date = dateObj ? dateObj.toLocaleString('id-ID') : '-';
+                    const statusColors = {
+                        'pending': 'bg-warning text-dark',
+                        'processing': 'bg-info text-dark',
+                        'success': 'bg-success',
+                        'failed': 'bg-danger'
+                    };
+                    const statusBadge = `<span class="badge ${statusColors[order.status] || 'bg-secondary'} status-badge">${order.status}</span>`;
+
+                    html += `
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-white">${order.orderId || order.invoiceId || 'INV-???'}</div>
+                                <div class="small text-muted">${date}</div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-white">${order.game || order.gameTitle || '-'}</div>
+                                <div class="small text-muted">${order.nominalLabel || order.nominal || order.itemLabel || '-'}</div>
+                            </td>
+                            <td>
+                                <div class="text-white">${order.playerId || order.userId || '-'}</div>
+                                <div class="small text-muted">${order.zoneId ? '('+order.zoneId+')' : ''}</div>
+                            </td>
+                            <td class="fw-bold text-highlight">
+                                Rp ${((order.finalPrice ?? order.price ?? order.totalPrice ?? 0)).toLocaleString('id-ID')}
+                            </td>
+                            <td>${statusBadge}</td>
+                            <td class="text-end pe-4">
+                                <div class="d-inline-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="openEditModal('${order.id}')">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal('${order.id}')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tbody.innerHTML = html;
+
+            } catch (error) {
+                console.error("Error loading orders:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Gagal memuat data: ${error.message}</td></tr>`;
+            }
+        }
+
+        const deleteModalEl = document.createElement('div');
+        deleteModalEl.className = 'modal fade';
+        deleteModalEl.id = 'deleteModal';
+        deleteModalEl.tabIndex = -1;
+        deleteModalEl.innerHTML = `
+            <div class="modal-dialog">
+                <div class="modal-content section-card text-white">
+                    <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <h5 class="modal-title">Hapus Pesanan</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="delete-id">
+                        <p class="mb-1">Yakin ingin menghapus pesanan ini?</p>
+                        <div class="small text-muted">Invoice: <span id="delete-invoice">-</span></div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" id="confirm-delete-btn">Hapus</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(deleteModalEl);
+
+        window.openDeleteModal = function(id) {
+            const order = orders.find(o => o.id === id);
+            document.getElementById('delete-id').value = id;
+            document.getElementById('delete-invoice').innerText = (order?.orderId || id);
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', async function(){
+            const id = document.getElementById('delete-id').value;
+            const btn = this;
+            const original = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menghapus...';
+            btn.disabled = true;
+            try {
+                await db.collection('orders').doc(id).delete();
+                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                loadOrders();
+                loadStats();
+            } catch (error) {
+                alert('Gagal menghapus: ' + error.message);
+            } finally {
+                btn.innerHTML = original;
+                btn.disabled = false;
+            }
+        });
+
+        window.openEditModal = function(id) {
+            const order = orders.find(o => o.id === id);
+            if (!order) return;
+
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-status').value = order.status || 'pending';
+            document.getElementById('edit-note').value = order.note || '';
+            
+            new bootstrap.Modal(document.getElementById('editModal')).show();
+        }
+
+        window.saveOrder = async function() {
+            const id = document.getElementById('edit-id').value;
+            const status = document.getElementById('edit-status').value;
+            const note = document.getElementById('edit-note').value;
+            
+            const btn = document.querySelector('#editModal .btn-primary');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+            btn.disabled = true;
+
+            try {
+                await db.collection('orders').doc(id).update({
+                    status: status,
+                    note: note,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Close modal and refresh
+                bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+                loadOrders();
+                loadStats();
+                
+                // Show toast or alert (optional)
+            } catch (error) {
+                alert('Gagal update: ' + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

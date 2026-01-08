@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Top Up - MamaGaming</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+      <!-- Brand (Left) -->
+      <a class="navbar-brand fw-bold text-white" href="index.html">
+        <i class="fa-solid fa-gamepad me-2 fa-xl text-warning"></i>MAMAGAMING
+      </a>
+
+      <!-- Toggler Mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav Menu (Center) & Search/Auth (Right) -->
+      <div class="collapse navbar-collapse" id="nav">
+        <!-- Center Menu -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="orders.html"><i class="fa-solid fa-receipt"></i> Cek Pesanan</a>
+          </li>
+        </ul>
+
+        <!-- Right Menu (Search & Auth) -->
+        <div class="d-flex align-items-center gap-2 ms-lg-3">
+           <div id="auth-buttons" class="d-flex gap-2">
+            <a href="login.html" class="btn btn-auth"><i class="fa-solid fa-right-to-bracket me-2"></i>Masuk</a>
+            <a href="register.html" class="btn btn-primary px-4 rounded-pill">Daftar</a>
+          </div>
+
+          <div id="user-menu-container" class="d-none dropdown">
+            <button class="btn btn-dark dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+              <i class="fa-solid fa-user-circle fa-lg"></i> <span id="user-email-display" class="d-none d-md-inline small">User</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
+              <li><a class="dropdown-item" href="orders.html"><i class="fa-solid fa-receipt me-2"></i> Riwayat Transaksi</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+    <div class="row g-4">
+      <!-- Left Sidebar (Info Game) -->
+      <div class="col-lg-4">
+        <div class="game-info-sticky" style="position: sticky; top: 100px;">
+          <!-- Game Details -->
+          <div class="section-card">
+            <div class="position-relative">
+                 <img id="game-image" src="" class="img-fluid w-100" alt="Game" style="min-height: 250px; object-fit: cover;">
+                 <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(18,18,18,1) 0%, rgba(18,18,18,0.8) 50%, transparent 100%);">
+                     <h3 class="fw-bold text-white mb-1" id="game-title">-</h3>
+                     <p class="text-accent small mb-0 fw-bold" id="game-publisher" style="color: var(--accent-color);">-</p>
+                 </div>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex gap-2 mb-4">
+                <span class="badge badge-glass-success d-flex align-items-center gap-2 px-3 py-2 rounded-pill">
+                    <i class="fa-solid fa-bolt"></i> Proses Kilat
+                </span>
+                <span class="badge badge-glass-primary d-flex align-items-center gap-2 px-3 py-2 rounded-pill">
+                    <i class="fa-solid fa-clock"></i> Layanan 24 Jam
+                </span>
+              </div>
+              <div class="small text-muted" id="game-desc" style="font-size: 0.95rem; line-height: 1.7; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+                <!-- Description -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cara Top Up -->
+          <div class="section-card">
+            <div class="section-header-custom">
+                <i class="fa-solid fa-circle-info text-warning me-2"></i>Cara Top Up
+            </div>
+            <div class="card-body p-4">
+              <ul class="how-to-list">
+                <li>Masukkan <strong>ID Akun</strong> Anda.</li>
+                <li>Pilih <strong>Nominal</strong> yang diinginkan.</li>
+                <li>Pilih <strong>Metode Pembayaran</strong>.</li>
+                <li>Masukkan nomor WhatsApp (Opsional).</li>
+                <li>Klik tombol <strong>Beli Sekarang</strong>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Content (Form) -->
+      <div class="col-lg-8">
+        <form id="order-form">
+          <!-- Step 1: Data Akun -->
+          <div class="section-card">
+            <div class="section-header-custom">
+              <span class="step-badge">1</span> Masukkan Data Akun
+            </div>
+            <div class="card-body p-4">
+              <div class="row g-3" id="input-fields">
+                <!-- Dynamic Inputs -->
+              </div>
+              <div class="form-text mt-3 text-white-50"><i class="fa-solid fa-circle-question me-1"></i> Pastikan ID yang Anda masukkan sudah benar.</div>
+            </div>
+          </div>
+
+          <!-- Step 2: Nominal -->
+          <div class="section-card">
+            <div class="section-header-custom">
+              <span class="step-badge">2</span> Pilih Nominal
+            </div>
+            <div class="card-body p-4">
+              <div class="row row-cols-2 row-cols-md-3 g-3" id="nominal-grid">
+                <!-- Dynamic Nominal -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Pembayaran -->
+          <div class="section-card">
+            <div class="section-header-custom">
+              <span class="step-badge">3</span> Pilih Pembayaran
+            </div>
+            <div class="card-body p-4">
+              <div class="alert alert-info small mb-3 bg-dark text-info border-secondary d-flex align-items-center">
+                <i class="fa-solid fa-shield-halved me-2"></i> Pembayaran Anda aman dan terenkripsi.
+              </div>
+              <div class="list-group">
+                <label class="list-group-item d-flex justify-content-between align-items-center cursor-pointer active border-primary bg-dark text-white p-3" style="border-width: 2px;">
+                  <div class="d-flex align-items-center">
+                    <input class="form-check-input me-3" type="radio" name="payment" value="QRIS" checked required style="transform: scale(1.2);"> 
+                    <div>
+                        <div class="fw-bold text-warning mb-1">QRIS / E-Wallet</div>
+                        <div class="small text-white-50">Scan QRIS (DANA, OVO, Gopay, ShopeePay, LinkAja, Mobile Banking)</div>
+                    </div>
+                  </div>
+                  <img src="https://bagibagi.co/bagibagi-09.png" class="payment-logo bg-white p-1 rounded" style="height: 35px; object-fit: contain;" alt="BagiBagi">
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Beli -->
+          <div class="section-card mb-5">
+             <div class="section-header-custom">
+              <span class="step-badge">4</span> Konfirmasi Pesanan
+            </div>
+            <div class="card-body p-4">
+              <div class="mb-4">
+                <label class="form-label text-white fw-bold small">Nomor WhatsApp (Opsional)</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-white-50"><i class="fa-brands fa-whatsapp"></i></span>
+                    <input type="text" class="form-control" id="contact" placeholder="08xxxxxxxxxx">
+                </div>
+                <div class="form-text text-white-50 mt-2">Bukti transaksi akan dikirim ke nomor ini.</div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-lg hover-scale" id="btn-order" style="font-size: 1.1rem; letter-spacing: 0.5px;">
+                <i class="fa-solid fa-cart-shopping me-2"></i> BELI SEKARANG
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-white pt-5 pb-3 mt-5" style="background-color: var(--bg-card); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">MAMAGAMING</h5>
+          <p class="small text-white-50">Platform top up game terpercaya di Indonesia. Kami menyediakan layanan top up untuk berbagai game populer dengan harga termurah.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Metode Pembayaran</h5>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-light text-dark">QRIS</span>
+            <span class="badge bg-light text-dark">DANA</span>
+            <span class="badge bg-light text-dark">OVO</span>
+            <span class="badge bg-light text-dark">GoPay</span>
+            <span class="badge bg-light text-dark">ShopeePay</span>
+            <span class="badge bg-light text-dark">LinkAja</span>
+            <span class="badge bg-light text-dark">Mobile Banking</span>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Hubungi Kami</h5>
+          <ul class="list-unstyled small text-white-50">
+            <li class="mb-2"><i class="fab fa-whatsapp me-2"></i> 0812-3456-7890</li>
+            <li class="mb-2"><i class="far fa-envelope me-2"></i> support@mamagaming.com</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-secondary">
+      <div class="text-center small text-white-50">
+        &copy; 2026 MamaGaming. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border-secondary">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title fw-bold"><i class="fa-solid fa-receipt text-warning me-2"></i>Detail Pembayaran</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="bg-secondary bg-opacity-10 border border-secondary rounded p-3 mb-4 d-flex justify-content-between align-items-center">
+             <span class="small text-white-50">No. Invoice:</span>
+             <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-white font-monospace" id="modal-invoice">-</span>
+                <button class="btn btn-sm btn-outline-warning rounded-circle" id="btn-copy-invoice" title="Salin Invoice" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+             </div>
+          </div>
+
+          <p class="mb-2 text-white-50 small text-uppercase fw-bold ls-1">Total Pembayaran</p>
+          <h2 class="fw-bold text-warning mb-2 display-4" id="modal-total-price">Rp -</h2>
+          <div class="d-flex justify-content-center mb-4">
+            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2">
+              <i class="fa-solid fa-triangle-exclamation me-1"></i> Transfer Sesuai Nominal (Termasuk 3 Digit Terakhir)
+            </span>
+          </div>
+          
+          <div class="bg-black bg-opacity-25 rounded-3 p-3 text-start border border-secondary border-opacity-50">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-white-50">Harga Produk</span>
+                <span class="fw-bold text-white" id="modal-price">Rp -</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-white-50">Kode Unik</span>
+                <span class="fw-bold text-warning" id="modal-unique-code">+ Rp -</span>
+            </div>
+            <div class="border-top border-secondary border-opacity-50 my-2"></div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-white">Total Bayar</span>
+                <span class="fw-bold text-success fs-5" id="modal-final-price">Rp -</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary flex-column">
+          <a href="#" id="btn-confirm-payment" target="_blank" class="btn btn-success fw-bold px-5 py-2 rounded-pill w-100 mb-2">
+            <i class="fa-solid fa-money-bill-wave me-2"></i> Bayar Sekarang
+          </a>
+          <button type="button" class="btn btn-outline-secondary w-100 rounded-pill fw-bold" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/firebase.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/product.js"></script>
+</body>
+</html>
